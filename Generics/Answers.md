@@ -17,3 +17,12 @@ argument of type 'T' could be found.
 The compiler rejects `item.Id` because `T` can represent any type. At this stage, we have not told the compiler that every type used with `Store<T>` must have an `Id` property. Even if `Student` and `Course` both have an `Id`, the compiler cannot assume that every possible type passed to `T` has one.
 
 We need a constraint that guarantees the required property exists. This is what the `IHasId` interface and the `where T : IHasId` constraint will provide in the next step.
+
+
+## Step 7 — Why Store<string> Must Not Compile
+
+`Store<T>` has the constraint `where T : IHasId`. This means that every type used with the store must implement `IHasId` and provide a readable integer `Id` property. The `string` type does not implement this interface, so `Store<string>` violates the generic constraint and the compiler rejects it.
+
+## Final Research Question — What Is This Kind of Class Called?
+
+The common name for this kind of class is a **generic repository** or **Repository pattern** implementation. It provides a reusable way to store, retrieve, and remove objects without writing a separate store class for every entity type. In a real application, the Repository pattern often abstracts data access, although this assignment's implementation stores objects in memory rather than a database.
