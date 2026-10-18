@@ -60,3 +60,34 @@ courses.Add(new Course(101, "C# Basics", 1500m));
 courses.Add(new Course(102, "ASP.NET Core", 2500m));
 
 Console.WriteLine(courses.GetById(101)?.Title);
+
+
+
+List<Student> testStudents = new List<Student>
+{
+    new Student(1, "Ahmed"),
+    new Student(2, "Mohamed"),
+    new Student(3, "Ali"),
+    new Student(4, "Omar"),
+    new Student(5, "Mona")
+};
+
+Console.WriteLine("=== Page ===");
+
+foreach (Student item in testStudents.Page(2, 2))
+{
+    Console.WriteLine(item.Name);
+}
+
+Console.WriteLine("=== FindById ===");
+Console.WriteLine(testStudents.FindById(3)?.Name ?? "Not found");
+Console.WriteLine(testStudents.FindById(99)?.Name ?? "Not found");
+
+Console.WriteLine("=== ToIdDictionary ===");
+
+IReadOnlyDictionary<int, Student> studentDictionary =
+    testStudents.ToIdDictionary();
+
+Console.WriteLine(studentDictionary[1].Name);
+Console.WriteLine(studentDictionary.Count);
+
