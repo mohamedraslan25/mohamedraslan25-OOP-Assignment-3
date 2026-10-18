@@ -1,45 +1,41 @@
 ﻿
 using src;
+using System;
 using System.Collections.Generic;
 
 public class Store<T> where T : IHasId
 {
-    private readonly List<T> _items = new List<T>();
+    private readonly Dictionary<int, T> _items = new Dictionary<int, T>();
 
     public void Add(T item)
     {
-        _items.Add(item);
+        if (_items.ContainsKey(item.Id))
+        {
+            throw new ArgumentException(
+                $"An item with ID {item.Id} already exists.",
+                nameof(item));
+        }
+
+        _items.Add(item.Id, item);
     }
 
     public T? GetById(int id)
     {
-        foreach (T item in _items)
+        if (_items.TryGetValue(id, out T? item))
         {
-            if (item.Id == id)
-            {
-                return item;
-            }
+            return item;
         }
 
         return default;
     }
 
-    public List<T> GetAll()
+    public IReadOnlyCollection<T> GetAll()
     {
-        return new List<T>(_items);
+        return new List<T>(_items.Values).AsReadOnly();
     }
 
     public bool Remove(int id)
     {
-        for (int i = 0; i < _items.Count; i++)
-        {
-            if (_items[i].Id == id)
-            {
-                _items.RemoveAt(i);
-                return true;
-            }
-        }
-
-        return false;
+        return _items.Remove(id);
     }
 }

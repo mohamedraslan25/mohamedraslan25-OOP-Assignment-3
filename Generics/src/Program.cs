@@ -1,39 +1,62 @@
 ﻿
+using System;
+using System.Collections.Generic;
 using src;
 
-StudentStore store = new StudentStore();
+Store<Student> students = new Store<Student>();
 
-store.Add(new Student(1, "Ahmed"));
-store.Add(new Student(2, "Mohamed"));
-store.Add(new Student(3, "Ali"));
+students.Add(new Student(1, "Ahmed"));
+students.Add(new Student(2, "Mohamed"));
+students.Add(new Student(3, "Ali"));
 
-Student? student = store.GetById(2);
+Console.WriteLine("=== GetById ===");
 
-if (student != null)
+Student? student = students.GetById(2);
+Console.WriteLine(student != null
+    ? $"Found: {student.Id} - {student.Name}"
+    : "Student not found");
+
+Student? missingStudent = students.GetById(99);
+Console.WriteLine(missingStudent == null
+    ? "Student not found"
+    : missingStudent.Name);
+
+Console.WriteLine();
+Console.WriteLine("=== Duplicate ID Test ===");
+
+try
 {
-    Console.WriteLine($"Found: {student.Id} - {student.Name}");
+    students.Add(new Student(1, "Another Ahmed"));
+}
+catch (ArgumentException ex)
+{
+    Console.WriteLine(ex.Message);
 }
 
-Student? missingStudent = store.GetById(99);
-Console.WriteLine(missingStudent == null ? "Student not found" : missingStudent.Name);
+Console.WriteLine();
+Console.WriteLine("=== Remove Test ===");
 
-Console.WriteLine("All students:");
+Console.WriteLine($"Removed student 2: {students.Remove(2)}");
+Console.WriteLine($"Removed student 2 again: {students.Remove(2)}");
 
-foreach (Student item in store.GetAll())
+Console.WriteLine();
+Console.WriteLine("=== GetAll ===");
+
+IReadOnlyCollection<Student> allStudents = students.GetAll();
+
+foreach (Student item in allStudents)
 {
     Console.WriteLine($"{item.Id} - {item.Name}");
 }
 
-bool removed = store.Remove(2);
-Console.WriteLine($"Removed student 2: {removed}");
+Console.WriteLine($"Students remaining: {allStudents.Count}");
 
-Console.WriteLine($"Students remaining: {store.GetAll().Count}");
-
-Store<Student> students = new Store<Student>();
-students.Add(new Student(1, "Ahmed"));
+Console.WriteLine();
+Console.WriteLine("Course Store Test");
 
 Store<Course> courses = new Store<Course>();
-courses.Add(new Course(101, "C# Basics", 1500m));
 
-Console.WriteLine(students.GetById(1)?.Name);
+courses.Add(new Course(101, "C# Basics", 1500m));
+courses.Add(new Course(102, "ASP.NET Core", 2500m));
+
 Console.WriteLine(courses.GetById(101)?.Title);
