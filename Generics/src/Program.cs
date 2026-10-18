@@ -28,3 +28,12 @@ bool removed = store.Remove(2);
 Console.WriteLine($"Removed student 2: {removed}");
 
 Console.WriteLine($"Students remaining: {store.GetAll().Count}");
+
+Store<Student> students = new Store<Student>();
+students.Add(new Student(1, "Ahmed"));
+
+Store<Course> courses = new Store<Course>();
+courses.Add(new Course(101, "C# Basics", 1500m));
+
+Console.WriteLine(students.GetById(1)?.Name);
+Console.WriteLine(courses.GetById(101)?.Title);
